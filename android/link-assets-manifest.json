@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/FONTSPRINGDEMO-ObviaBold.otf",
+      "sha1": "21266b5fa8bfaf3d530e2f5e563ab68f141ce912"
+    },
+    {
+      "path": "src/assets/fonts/FONTSPRINGDEMO-ObviaRegular.otf",
+      "sha1": "1b47cc8b3a4c464dc7b7027253048e6bc01afa95"
+    }
+  ]
+}
