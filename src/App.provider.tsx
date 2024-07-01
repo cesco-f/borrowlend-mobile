@@ -1,11 +1,18 @@
-import React from 'react';
-import {MoodOptionType, MoodOptionWithTimestamp} from './types';
+import React, {useCallback, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const storageKey = 'my-app-data';
 
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  city: string;
+}
+
 type AppData = {
-  moods: MoodOptionWithTimestamp[];
+  user: User;
+  isLoggedIn: boolean;
 };
 
 const getAppData = async (): Promise<AppData | null> => {
@@ -28,54 +35,53 @@ const setAppData = async (newData: AppData) => {
 };
 
 type AppContextType = {
-  moodList: MoodOptionWithTimestamp[];
-  handleSelectMood: (mood: MoodOptionType) => void;
-  handleDeleteMood: (mood: MoodOptionWithTimestamp) => void;
+  isLoggedIn: boolean;
+  user: User;
+  logIn: (user: User) => void;
+  logOut: () => void;
 };
 
-const defaultValue = {
-  moodList: [],
-  handleSelectMood: () => {},
-  handleDeleteMood: () => {},
+const defaultUser: User = {city: '', firstName: '', id: '', lastName: ''};
+
+const defaultValue: AppContextType = {
+  isLoggedIn: false,
+  user: defaultUser,
+  logIn: () => {},
+  logOut: () => {},
 };
 
 const AppContext = React.createContext<AppContextType>(defaultValue);
 
 export const AppProvider = ({children}: {children: React.ReactElement}) => {
-  const [moodList, setMoodList] = React.useState<MoodOptionWithTimestamp[]>([]);
+  const [user, setUser] = useState<User>(defaultUser);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   React.useEffect(() => {
     const getDataFromStorage = async () => {
       const data = await getAppData();
 
       if (data) {
-        setMoodList(data.moods);
+        setUser(data.user);
+        setIsLoggedIn(data.isLoggedIn);
       }
     };
     getDataFromStorage();
   }, []);
-  const handleSelectMood = React.useCallback((mood: MoodOptionType) => {
-    setMoodList(current => {
-      const newValue = [...current, {mood, timestamp: Date.now()}];
-      setAppData({moods: newValue});
-      return newValue;
-    });
+
+  const logIn = useCallback((newUser: User) => {
+    setUser(newUser);
+    setIsLoggedIn(true);
+    setAppData({isLoggedIn: true, user: newUser});
   }, []);
 
-  const handleDeleteMood = React.useCallback(
-    (mood: MoodOptionWithTimestamp) => {
-      setMoodList(current => {
-        const newValue = current.filter(
-          item => item.timestamp !== mood.timestamp,
-        );
-        setAppData({moods: newValue});
-        return newValue;
-      });
-    },
-    [],
-  );
+  const logOut = useCallback(() => {
+    setUser(defaultUser);
+    setIsLoggedIn(false);
+    setAppData({isLoggedIn: false, user: defaultUser});
+  }, []);
 
   return (
-    <AppContext.Provider value={{moodList, handleSelectMood, handleDeleteMood}}>
+    <AppContext.Provider value={{isLoggedIn, logIn, logOut, user}}>
       {children}
     </AppContext.Provider>
   );

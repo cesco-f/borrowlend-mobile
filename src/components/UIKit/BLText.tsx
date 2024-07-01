@@ -1,6 +1,7 @@
 import React from 'react';
-import {StyleProp, Text, TextStyle} from 'react-native';
+import {StyleProp, TextStyle} from 'react-native';
 import {theme} from '../../theme';
+import {Text} from 'react-native-paper';
 
 export const BLText = ({
   content,

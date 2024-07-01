@@ -1,15 +1,9 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Home} from './Home.screen';
-import {History} from './History.screen';
-import {Analytics} from './Analytics.screen';
-import {
-  AnalyticsIcon,
-  HistoryIcon,
-  HomeIcon,
-  IconProps,
-} from '../components/icons';
+import {Profile} from './Profile.screen';
+import {IconProps, ProfileIcon, SearchIcon} from '../components/icons';
 import {theme} from '../theme';
+import {Search} from './Search.screen';
 
 const BottomTabs = createBottomTabNavigator();
 
@@ -21,18 +15,17 @@ interface BottomTabsScreen {
 }
 
 const bottomTabsScreens: BottomTabsScreen[] = [
-  {name: 'Home', component: Home, tabBarIcon: HomeIcon, title: "Today's Mood"},
   {
-    name: 'History',
-    component: History,
-    tabBarIcon: HistoryIcon,
-    title: 'Past Moods',
+    name: 'Search',
+    component: Search,
+    tabBarIcon: SearchIcon,
+    title: 'Search',
   },
   {
-    name: 'Analytics',
-    component: Analytics,
-    tabBarIcon: AnalyticsIcon,
-    title: 'Fancy Charts',
+    name: 'Profile',
+    component: Profile,
+    tabBarIcon: ProfileIcon,
+    title: 'Profile',
   },
 ];
 const getTabBarIcon =
