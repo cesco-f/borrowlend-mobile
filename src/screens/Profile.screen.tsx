@@ -12,18 +12,18 @@ export const Profile = () => {
   } = useAppContext();
   return (
     <View style={styles.container}>
-      <BLText style={styles.title} content="User Profile" />
+      <BLText style={styles.title}>User Profile</BLText>
       <View style={styles.infoContainer}>
-        <BLText style={styles.label} content="First Name" />
-        <BLText style={styles.value} content={firstName} />
+        <BLText style={styles.label}>First Name</BLText>
+        <BLText style={styles.value}>{firstName}</BLText>
       </View>
       <View style={styles.infoContainer}>
-        <BLText style={styles.label} content="Last Name:" />
-        <BLText style={styles.value} content={lastName} />
+        <BLText style={styles.label}>Last Name:</BLText>
+        <BLText style={styles.value}>{lastName}</BLText>
       </View>
       <View style={styles.infoContainer}>
-        <BLText style={styles.label} content="City" />
-        <BLText style={styles.value} content={city} />
+        <BLText style={styles.label}>City</BLText>
+        <BLText style={styles.value}>{city} </BLText>
       </View>
       <Button mode="contained" onPress={logOut} style={styles.button}>
         Log Out

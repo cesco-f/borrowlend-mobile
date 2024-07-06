@@ -46,7 +46,7 @@ export const MoodPicker = ({
       <View style={styles.container}>
         <Image source={imageSrc} style={styles.image} />
         <Pressable style={styles.button} onPress={() => setHasSelected(false)}>
-          <BLText style={styles.buttonText} content="Back" />
+          <BLText style={styles.buttonText}>Back</BLText>
         </Pressable>
       </View>
     );
@@ -54,7 +54,7 @@ export const MoodPicker = ({
 
   return (
     <View style={styles.container}>
-      <BLText content="How are you right now4?" style={styles.heading} />
+      <BLText style={styles.heading}>How are you right now4?</BLText>
       <View style={styles.moodList}>
         {moodOptions.map(option => (
           <View key={option.emoji}>
@@ -66,21 +66,18 @@ export const MoodPicker = ({
                   ? styles.selectedMoodItem
                   : undefined,
               ]}>
-              <BLText content={option.emoji} style={styles.moodText} />
+              <BLText style={styles.moodText}>{option.emoji}</BLText>
             </Pressable>
-            <BLText
-              content={
-                selectedMood?.emoji === option.emoji ? option.description : ' '
-              }
-              style={styles.descriptionText}
-            />
+            <BLText style={styles.descriptionText}>
+              {selectedMood?.emoji === option.emoji ? option.description : ''}
+            </BLText>
           </View>
         ))}
       </View>
       <ReanimatedPressable
         style={[styles.button, buttonStyle]}
         onPress={handleSelect}>
-        <BLText content="Choose" style={styles.buttonText} />
+        <BLText style={styles.buttonText}>Choose</BLText>
       </ReanimatedPressable>
     </View>
   );

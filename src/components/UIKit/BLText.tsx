@@ -1,13 +1,13 @@
 import React from 'react';
 import {StyleProp, TextStyle} from 'react-native';
 import {theme} from '../../theme';
-import {Text} from 'react-native-paper';
+import {Text, TextProps} from 'react-native-paper';
 
 export const BLText = ({
-  content,
   style,
-}: {
-  content: string;
+  children,
+  ...rest
+}: TextProps<unknown> & {
   style?: StyleProp<TextStyle> & {fontWeight?: 'bold'};
 }) => {
   return (
@@ -21,8 +21,9 @@ export const BLText = ({
               : theme.fontFamilyRegular,
           fontWeight: undefined,
         },
-      ]}>
-      {content}
+      ]}
+      {...rest}>
+      {children}
     </Text>
   );
 };

@@ -13,7 +13,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <BLText style={styles.title} content="Login" />
+      <BLText style={styles.title}>Login</BLText>
       <BLTextInput
         label="Email"
         value={email}
@@ -42,7 +42,7 @@ export default function LoginScreen() {
           });
         }}
         style={styles.button}>
-        <BLText content="Login" style={{color: theme.colorWhite}} />
+        <BLText style={{color: theme.colorWhite}}>Login</BLText>
       </Button>
     </View>
   );
