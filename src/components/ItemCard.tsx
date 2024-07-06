@@ -3,19 +3,23 @@ import {Card} from 'react-native-paper';
 import {BLText} from './UIKit/BLText';
 import {StyleSheet} from 'react-native';
 import {BLItem} from '../types';
+import {theme} from '../theme';
+
+const IMAGE_WIDTH = 150;
 
 export const ItemCard = ({item: {author, title, coverUrl}}: {item: BLItem}) => {
   return (
-    <Card style={styles.card}>
+    <Card style={styles.card} mode="contained">
       <Card.Cover
         source={{uri: coverUrl.replace('http', 'https')}}
-        resizeMode="contain"
+        resizeMode="stretch"
+        style={styles.image}
       />
-      <Card.Content>
-        <BLText numberOfLines={1} ellipsizeMode="tail">
+      <Card.Content style={styles.content}>
+        <BLText style={styles.title} numberOfLines={1} ellipsizeMode="tail">
           {title}
         </BLText>
-        <BLText>{author}</BLText>
+        <BLText style={styles.author}>{author}</BLText>
       </Card.Content>
     </Card>
   );
@@ -23,7 +27,25 @@ export const ItemCard = ({item: {author, title, coverUrl}}: {item: BLItem}) => {
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 16,
-    width: 200,
+    width: IMAGE_WIDTH,
+    alignSelf: 'flex-start',
+  },
+  image: {
+    width: IMAGE_WIDTH,
+  },
+  content: {
+    paddingHorizontal: 0,
+    paddingVertical: 5,
+    paddingBottom: 0,
+    backgroundColor: theme.colorWhite,
+    gap: 5,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  author: {
+    fontSize: 10,
+    color: theme.colorBlue,
   },
 });

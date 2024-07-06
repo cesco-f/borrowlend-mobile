@@ -6,11 +6,19 @@ import {theme} from '../theme';
 import {BLTextInput} from '../components/UIKit/BLTextInput';
 import {useSearchBooks} from '../hooks/useSearchBooks';
 import {ItemCard} from '../components/ItemCard';
+import {useAppContext} from '../App.provider';
 
 export const Search = () => {
   const [query, setQuery] = useState('');
   const [searchBooksQuery, setSearchBooksQuery] = useState('');
-  const booksQuery = useSearchBooks(searchBooksQuery);
+  const {
+    user: {city},
+  } = useAppContext();
+
+  const booksQuery = useSearchBooks({
+    searchTerm: searchBooksQuery,
+    language: city === 'Barcelona' ? 'es' : 'it',
+  });
 
   return (
     <View style={styles.container}>
@@ -35,6 +43,9 @@ export const Search = () => {
           data={booksQuery.data}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => <ItemCard item={item} />}
+          contentContainerStyle={styles.resultsContainer}
+          scrollEnabled
+          horizontal
         />
       ) : null}
     </View>
@@ -56,5 +67,10 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     marginBottom: 16,
+  },
+  resultsContainer: {
+    gap: 20,
+    backgroundColor: theme.colorWhite,
+    alignSelf: 'flex-start',
   },
 });

@@ -38,7 +38,7 @@ export default function LoginScreen() {
             lastName: 'Fagnani',
             firstName: 'Francesco',
             id: 'f522188b-ca91-4197-9662-a3c21b52b33f',
-            city: 'Creazzo',
+            city: 'Barcelona',
           });
         }}
         style={styles.button}>
