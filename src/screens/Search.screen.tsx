@@ -1,33 +1,16 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
-import {Button, Card} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {BLText} from '../components/UIKit/BLText';
 import {theme} from '../theme';
 import {BLTextInput} from '../components/UIKit/BLTextInput';
-
-interface Result {
-  title: string;
-}
+import {useSearchBooks} from '../hooks/useSearchBooks';
+import {ItemCard} from '../components/ItemCard';
 
 export const Search = () => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<Result[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
-
-  const handleSearch = async () => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      // Replace with your API endpoint and request logic
-      const response = {data: {results: [{title: 'My Title'}]}};
-      setResults(response.data.results); // Adjust based on your API response structure
-    } catch (err) {
-      setError('Something went wrong');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [searchBooksQuery, setSearchBooksQuery] = useState('');
+  const booksQuery = useSearchBooks(searchBooksQuery);
 
   return (
     <View style={styles.container}>
@@ -39,23 +22,21 @@ export const Search = () => {
       />
       <Button
         mode="contained"
-        onPress={handleSearch}
+        onPress={() => setSearchBooksQuery(query)}
         style={styles.button}
-        loading={loading}>
-        <BLText content="Search" style={{color: theme.colorWhite}} />
+        loading={booksQuery.isLoading}>
+        <BLText style={{color: theme.colorWhite}}>Search</BLText>
       </Button>
-      {error && <BLText style={styles.error} content={error} />}
-      <FlatList
-        data={results}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <Card style={styles.card}>
-            <Card.Content>
-              <BLText content={item.title} />
-            </Card.Content>
-          </Card>
-        )}
-      />
+      {booksQuery.error && (
+        <BLText style={styles.error}>{booksQuery.error.message}</BLText>
+      )}
+      {booksQuery.data ? (
+        <FlatList
+          data={booksQuery.data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) => <ItemCard item={item} />}
+        />
+      ) : null}
     </View>
   );
 };
@@ -74,9 +55,6 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
-    marginBottom: 16,
-  },
-  card: {
     marginBottom: 16,
   },
 });
