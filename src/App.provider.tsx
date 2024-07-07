@@ -1,17 +1,11 @@
 import React, {useCallback, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CompleteUser} from './types';
 
 const storageKey = 'my-app-data';
 
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  city: string;
-}
-
 type AppData = {
-  user: User;
+  user: CompleteUser;
   isLoggedIn: boolean;
 };
 
@@ -36,12 +30,22 @@ const setAppData = async (newData: AppData) => {
 
 type AppContextType = {
   isLoggedIn: boolean;
-  user: User;
-  logIn: (user: User) => void;
+  user: CompleteUser;
+  logIn: (user: CompleteUser) => void;
   logOut: () => void;
 };
 
-const defaultUser: User = {city: '', firstName: '', id: '', lastName: ''};
+const defaultUser: CompleteUser = {
+  name: '',
+  id: '',
+  lastName: '',
+  email: '',
+  friends: [],
+  items: [],
+  location: '',
+  receivedFriendRequests: [],
+  sentFriendRequests: [],
+};
 
 const defaultValue: AppContextType = {
   isLoggedIn: false,
@@ -53,7 +57,7 @@ const defaultValue: AppContextType = {
 const AppContext = React.createContext<AppContextType>(defaultValue);
 
 export const AppProvider = ({children}: {children: React.ReactElement}) => {
-  const [user, setUser] = useState<User>(defaultUser);
+  const [user, setUser] = useState<CompleteUser>(defaultUser);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   React.useEffect(() => {
@@ -68,7 +72,7 @@ export const AppProvider = ({children}: {children: React.ReactElement}) => {
     getDataFromStorage();
   }, []);
 
-  const logIn = useCallback((newUser: User) => {
+  const logIn = useCallback((newUser: CompleteUser) => {
     setUser(newUser);
     setIsLoggedIn(true);
     setAppData({isLoggedIn: true, user: newUser});

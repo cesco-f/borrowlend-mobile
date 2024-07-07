@@ -7,15 +7,16 @@ import {theme} from '../theme';
 
 export const Profile = () => {
   const {
-    user: {city, firstName, lastName},
+    user: {location, name, lastName},
     logOut,
   } = useAppContext();
+
   return (
     <View style={styles.container}>
       <BLText style={styles.title}>User Profile</BLText>
       <View style={styles.infoContainer}>
         <BLText style={styles.label}>First Name</BLText>
-        <BLText style={styles.value}>{firstName}</BLText>
+        <BLText style={styles.value}>{name}</BLText>
       </View>
       <View style={styles.infoContainer}>
         <BLText style={styles.label}>Last Name:</BLText>
@@ -23,7 +24,7 @@ export const Profile = () => {
       </View>
       <View style={styles.infoContainer}>
         <BLText style={styles.label}>City</BLText>
-        <BLText style={styles.value}>{city} </BLText>
+        <BLText style={styles.value}>{location} </BLText>
       </View>
       <Button mode="contained" onPress={logOut} style={styles.button}>
         Log Out

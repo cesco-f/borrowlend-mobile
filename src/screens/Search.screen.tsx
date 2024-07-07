@@ -12,12 +12,12 @@ export const Search = () => {
   const [query, setQuery] = useState('');
   const [searchBooksQuery, setSearchBooksQuery] = useState('');
   const {
-    user: {city},
+    user: {location},
   } = useAppContext();
 
   const booksQuery = useSearchBooks({
     searchTerm: searchBooksQuery,
-    language: city === 'Barcelona' ? 'es' : 'it',
+    language: location === 'Barcelona' ? 'es' : 'it',
   });
 
   return (

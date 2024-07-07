@@ -5,11 +5,20 @@ import {useAppContext} from '../App.provider';
 import {theme} from '../theme';
 import {BLText} from '../components/UIKit/BLText';
 import {BLTextInput} from '../components/UIKit/BLTextInput';
+import {fetchUserById, login} from '../api';
+import {useMutation} from '@tanstack/react-query';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {logIn} = useAppContext();
+
+  const {isPending, mutateAsync} = useMutation({
+    mutationFn: () => login({email, password}),
+    onSuccess: async ({id}) => {
+      logIn(await fetchUserById(id));
+    },
+  });
 
   return (
     <View style={styles.container}>
@@ -33,15 +42,11 @@ export default function LoginScreen() {
       />
       <Button
         mode="contained"
-        onPress={() => {
-          logIn({
-            lastName: 'Fagnani',
-            firstName: 'Francesco',
-            id: 'f522188b-ca91-4197-9662-a3c21b52b33f',
-            city: 'Barcelona',
-          });
+        onPress={async () => {
+          await mutateAsync();
         }}
-        style={styles.button}>
+        style={styles.button}
+        loading={isPending}>
         <BLText style={{color: theme.colorWhite}}>Login</BLText>
       </Button>
     </View>
