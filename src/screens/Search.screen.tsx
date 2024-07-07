@@ -7,18 +7,67 @@ import {BLTextInput} from '../components/UIKit/BLTextInput';
 import {useSearchBooks} from '../hooks/useSearchBooks';
 import {ItemCard} from '../components/ItemCard';
 import {useAppContext} from '../App.provider';
+import {BLItem, User} from '../types';
+import {useSearchUsers} from '../hooks/useSearchUsers';
+import {UserCard} from '../components/UserCard';
 
-export const Search = () => {
-  const [query, setQuery] = useState('');
+export const SearchBooks = () => {
   const [searchBooksQuery, setSearchBooksQuery] = useState('');
   const {
     user: {location},
   } = useAppContext();
 
-  const booksQuery = useSearchBooks({
+  const {data, isLoading, error} = useSearchBooks({
     searchTerm: searchBooksQuery,
     language: location === 'Barcelona' ? 'es' : 'it',
   });
+
+  return (
+    <Search
+      data={data}
+      isLoading={isLoading}
+      onPress={(query: string) => setSearchBooksQuery(query)}
+      error={error}
+      renderItem={({item}) => <ItemCard item={item} />}
+    />
+  );
+};
+
+export const SearchUsers = () => {
+  const [searchUsersQuery, setSearchUsersQuery] = useState('');
+  const {
+    user: {id},
+  } = useAppContext();
+
+  const {data, isLoading, error} = useSearchUsers({
+    searchTerm: searchUsersQuery,
+  });
+
+  return (
+    <Search
+      data={data ? data.filter(u => u.id !== id) : undefined}
+      isLoading={isLoading}
+      onPress={(query: string) => setSearchUsersQuery(query)}
+      error={error}
+      renderItem={({item}) => <UserCard user={item} />}
+    />
+  );
+};
+
+const Search = <T extends BLItem | User>({
+  isLoading,
+  onPress,
+  error,
+  data,
+  renderItem,
+}: {
+  isLoading: boolean;
+  onPress: (query: string) => void;
+  error: Error | null;
+  data?: T[];
+  renderItem: ({item}: {item: T}) => React.ReactElement;
+}) => {
+  const [query, setQuery] = useState('');
 
   return (
     <View style={styles.container}>
@@ -30,19 +79,17 @@ export const Search = () => {
       />
       <Button
         mode="contained"
-        onPress={() => setSearchBooksQuery(query)}
+        onPress={() => onPress(query)}
         style={styles.button}
-        loading={booksQuery.isLoading}>
+        loading={isLoading}>
         <BLText style={{color: theme.colorWhite}}>Search</BLText>
       </Button>
-      {booksQuery.error && (
-        <BLText style={styles.error}>{booksQuery.error.message}</BLText>
-      )}
-      {booksQuery.data ? (
+      {error && <BLText style={styles.error}>{error.message}</BLText>}
+      {data ? (
         <FlatList
-          data={booksQuery.data}
+          data={data}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => <ItemCard item={item} />}
+          renderItem={renderItem}
           contentContainerStyle={styles.resultsContainer}
           scrollEnabled
           horizontal
