@@ -10,8 +10,31 @@ import {
 export const API_BASE_URL =
   'https://s7zb7mc40b.execute-api.eu-central-1.amazonaws.com/dev/v1';
 
-const postRequest = (url: string, body: Record<string, unknown>) => {
-  return fetch(url, {
+const fetchWrapper = async <T>(url: string, options: RequestInit = {}) => {
+  // Request interceptor
+  console.log('Starting Request', {url, options});
+
+  try {
+    const response = await fetch(url, options);
+
+    // Response interceptor
+    if (!response.ok) {
+      // Handle errors here
+      const error = await response.json();
+      console.error('Error Response:', error);
+      throw new Error(error.message || 'Something went wrong');
+    }
+
+    const data = await response.json();
+    return data as T;
+  } catch (error) {
+    console.error('Fetch Error:', error);
+    throw error;
+  }
+};
+
+const postRequest = <T>(url: string, body: Record<string, unknown>) => {
+  return fetchWrapper<T>(url, {
     body: JSON.stringify(body),
     method: 'POST',
     headers: {
@@ -24,13 +47,11 @@ export const fetchBooks = async ({searchTerm, language}: SearchBooks) => {
   if (!searchTerm) {
     return [];
   }
-  const response = await fetch(
+  return fetchWrapper<BLItem[]>(
     `${API_BASE_URL}/books?q=${searchTerm
       .toLowerCase()
       .replace(' ', '+')}&language=${language}`,
   );
-
-  return response.json() as Promise<BLItem[]>;
 };
 
 export const fetchUsers = async ({searchTerm}: {searchTerm: string}) => {
@@ -38,25 +59,19 @@ export const fetchUsers = async ({searchTerm}: {searchTerm: string}) => {
     return [];
   }
 
-  const response = await fetch(
+  return fetchWrapper<User[]>(
     `${API_BASE_URL}/users?q=${searchTerm.split(' ')[0].toLowerCase()}`,
   );
-
-  return response.json() as Promise<User[]>;
 };
 
 export const fetchUserById = async (userId: string) => {
-  const response = await fetch(`${API_BASE_URL}/users/${userId}`);
-
-  return response.json() as Promise<CompleteUser>;
+  return fetchWrapper<CompleteUser>(`${API_BASE_URL}/users/${userId}`);
 };
 
 export const fetchReceivedFriendRequests = async (userId: string) => {
-  const response = await fetch(
+  return fetchWrapper<CompleteFriendRequest[]>(
     `${API_BASE_URL}/users/${userId}/receivedFriendRequests`,
   );
-
-  return response.json() as Promise<CompleteFriendRequest[]>;
 };
 
 export const login = async ({
@@ -66,12 +81,10 @@ export const login = async ({
   email: string;
   password: string;
 }) => {
-  const response = await postRequest(`${API_BASE_URL}/login`, {
+  return postRequest<User>(`${API_BASE_URL}/login`, {
     email,
     password,
   });
-
-  return response.json() as Promise<User>;
 };
 
 export const sendFriendRequest = async ({
@@ -81,12 +94,10 @@ export const sendFriendRequest = async ({
   userId: string;
   friendId: string;
 }) => {
-  const response = await postRequest(`${API_BASE_URL}/friendRequests`, {
+  return postRequest<FriendRequest>(`${API_BASE_URL}/friendRequests`, {
     userId,
     friendId,
   });
-
-  return response.json() as Promise<FriendRequest>;
 };
 
 const replyToFriendRequest = async (
@@ -99,15 +110,13 @@ const replyToFriendRequest = async (
     isAccepted: boolean;
   },
 ) => {
-  const response = await postRequest(
+  return postRequest<FriendRequest>(
     `${API_BASE_URL}/friendRequests/${friendRequestId}`,
     {
       userId,
       isAccepted,
     },
   );
-
-  return response.json() as Promise<FriendRequest>;
 };
 
 export const acceptFriendRequest = ({
@@ -137,30 +146,26 @@ export const deleteFriend = ({
   userId: string;
   friendId: string;
 }) => {
-  return fetch(`${API_BASE_URL}/users/${userId}/friends/${friendId}`, {
+  return fetchWrapper(`${API_BASE_URL}/users/${userId}/friends/${friendId}`, {
     method: 'DELETE',
   });
 };
 
 export const addUserItem = async (userId: string, item: BLItem) => {
-  const response = await postRequest(`${API_BASE_URL}/items`, {
+  return postRequest<BLItem>(`${API_BASE_URL}/items`, {
     userId,
     ...item,
   });
-
-  return response.json() as Promise<BLItem>;
 };
 
 export const queryItems = async (
   userId: string,
   query: 'friends' | 'location',
 ) => {
-  const response = await postRequest(`${API_BASE_URL}/userItems`, {
+  return postRequest<BLItem>(`${API_BASE_URL}/userItems`, {
     userId,
     query,
   });
-
-  return response.json() as Promise<BLItem>;
 };
 
 export const deleteUserItem = ({

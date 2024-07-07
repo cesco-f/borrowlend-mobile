@@ -1,6 +1,8 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CompleteUser} from './types';
+import {CompleteUser, FriendRequest} from './types';
+import {fetchUserById} from './api';
+import SplashScreen from 'react-native-splash-screen';
 
 const storageKey = 'my-app-data';
 
@@ -33,6 +35,7 @@ type AppContextType = {
   user: CompleteUser;
   logIn: (user: CompleteUser) => void;
   logOut: () => void;
+  addSentFriendRequest: (friendRequest: FriendRequest) => void;
 };
 
 const defaultUser: CompleteUser = {
@@ -52,6 +55,7 @@ const defaultValue: AppContextType = {
   user: defaultUser,
   logIn: () => {},
   logOut: () => {},
+  addSentFriendRequest: () => {},
 };
 
 const AppContext = React.createContext<AppContextType>(defaultValue);
@@ -60,22 +64,28 @@ export const AppProvider = ({children}: {children: React.ReactElement}) => {
   const [user, setUser] = useState<CompleteUser>(defaultUser);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  React.useEffect(() => {
+  const updateUser = (updatedUser: CompleteUser) => {
+    setUser(updatedUser);
+    setAppData({isLoggedIn: true, user: updatedUser});
+  };
+
+  useEffect(() => {
     const getDataFromStorage = async () => {
       const data = await getAppData();
 
-      if (data) {
-        setUser(data.user);
+      if (data?.user.id) {
+        const updatedUser = await fetchUserById(data.user.id);
+        updateUser(updatedUser);
         setIsLoggedIn(data.isLoggedIn);
       }
+      SplashScreen.hide();
     };
     getDataFromStorage();
   }, []);
 
   const logIn = useCallback((newUser: CompleteUser) => {
-    setUser(newUser);
+    updateUser(newUser);
     setIsLoggedIn(true);
-    setAppData({isLoggedIn: true, user: newUser});
   }, []);
 
   const logOut = useCallback(() => {
@@ -84,8 +94,17 @@ export const AppProvider = ({children}: {children: React.ReactElement}) => {
     setAppData({isLoggedIn: false, user: defaultUser});
   }, []);
 
+  const addSentFriendRequest = (friendRequest: FriendRequest) => {
+    const updatedUser = {
+      ...user,
+      sentFriendRequests: [...user.sentFriendRequests, friendRequest],
+    };
+    updateUser(updatedUser);
+  };
+
   return (
-    <AppContext.Provider value={{isLoggedIn, logIn, logOut, user}}>
+    <AppContext.Provider
+      value={{isLoggedIn, logIn, logOut, user, addSentFriendRequest}}>
       {children}
     </AppContext.Provider>
   );
