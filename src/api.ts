@@ -20,12 +20,11 @@ const fetchWrapper = async <T>(url: string, options: RequestInit = {}) => {
     // Response interceptor
     if (!response.ok) {
       // Handle errors here
-      const error = await response.json();
+      const error = await response.text();
       console.error('Error Response:', error);
-      throw new Error(error.message || 'Something went wrong');
+      throw new Error(error || 'Something went wrong');
     }
-
-    const data = await response.json();
+    const data = options.method === 'DELETE' ? {} : await response.json();
     return data as T;
   } catch (error) {
     console.error('Fetch Error:', error);

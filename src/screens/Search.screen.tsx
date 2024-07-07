@@ -9,70 +9,29 @@ import {ItemCard} from '../components/ItemCard';
 import {useAppContext} from '../App.provider';
 import {BLItem, User} from '../types';
 import {useSearchUsers} from '../hooks/useSearchUsers';
-import {UserCard} from '../components/UserCard';
+import {SearchUserCard} from '../components/UserCard';
 
-export const SearchBooks = () => {
-  const [searchBooksQuery, setSearchBooksQuery] = useState('');
-  const {
-    user: {location},
-  } = useAppContext();
-
-  const {data, isLoading, error} = useSearchBooks({
-    searchTerm: searchBooksQuery,
-    language: location === 'Barcelona' ? 'es' : 'it',
-  });
-
-  return (
-    <Search
-      data={data}
-      isLoading={isLoading}
-      onPress={(query: string) => setSearchBooksQuery(query)}
-      error={error}
-      renderItem={({item}) => <ItemCard item={item} />}
-    />
-  );
-};
-
-export const SearchUsers = () => {
-  const [searchUsersQuery, setSearchUsersQuery] = useState('');
-  const {
-    user: {id},
-  } = useAppContext();
-
-  const {data, isLoading, error} = useSearchUsers({
-    searchTerm: searchUsersQuery,
-  });
-
-  return (
-    <Search
-      data={data ? data.filter(u => u.id !== id) : undefined}
-      isLoading={isLoading}
-      onPress={(query: string) => setSearchUsersQuery(query)}
-      error={error}
-      renderItem={({item}) => <UserCard user={item} />}
-    />
-  );
-};
-
-const Search = <T extends BLItem | User>({
+const SearchInternal = <T extends BLItem | User>({
   isLoading,
   onPress,
   error,
   data,
   renderItem,
+  label,
 }: {
   isLoading: boolean;
   onPress: (query: string) => void;
   error: Error | null;
   data?: T[];
   renderItem: ({item}: {item: T}) => React.ReactElement;
+  label: string;
 }) => {
   const [query, setQuery] = useState('');
 
   return (
     <View style={styles.container}>
       <BLTextInput
-        label="Search"
+        label={label}
         value={query}
         onChangeText={setQuery}
         style={styles.input}
@@ -96,6 +55,60 @@ const Search = <T extends BLItem | User>({
         />
       ) : null}
     </View>
+  );
+};
+
+const SearchBooks = () => {
+  const [searchBooksQuery, setSearchBooksQuery] = useState('');
+  const {
+    user: {location},
+  } = useAppContext();
+
+  const {data, isLoading, error} = useSearchBooks({
+    searchTerm: searchBooksQuery,
+    language: location === 'Barcelona' ? 'es' : 'it',
+  });
+
+  return (
+    <SearchInternal
+      data={data}
+      isLoading={isLoading}
+      onPress={(query: string) => setSearchBooksQuery(query)}
+      error={error}
+      renderItem={({item}) => <ItemCard item={item} />}
+      label="Search books"
+    />
+  );
+};
+
+const SearchUsers = () => {
+  const [searchUsersQuery, setSearchUsersQuery] = useState('');
+  const {
+    user: {id},
+  } = useAppContext();
+
+  const {data, isLoading, error} = useSearchUsers({
+    searchTerm: searchUsersQuery,
+  });
+
+  return (
+    <SearchInternal
+      data={data ? data.filter(u => u.id !== id) : undefined}
+      isLoading={isLoading}
+      onPress={(query: string) => setSearchUsersQuery(query)}
+      error={error}
+      renderItem={({item}) => <SearchUserCard item={item} />}
+      label="Search users"
+    />
+  );
+};
+
+export const Search = () => {
+  return (
+    <>
+      <SearchBooks />
+      <SearchUsers />
+    </>
   );
 };
 

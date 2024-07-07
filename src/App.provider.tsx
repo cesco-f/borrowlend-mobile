@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CompleteUser, FriendRequest} from './types';
+import {CompleteUser, FriendRequest, User} from './types';
 import {fetchUserById} from './api';
 import SplashScreen from 'react-native-splash-screen';
 
-const storageKey = 'my-app-data';
+const storageKey = 'borrowlend-data';
 
 type AppData = {
   user: CompleteUser;
@@ -36,6 +36,9 @@ type AppContextType = {
   logIn: (user: CompleteUser) => void;
   logOut: () => void;
   addSentFriendRequest: (friendRequest: FriendRequest) => void;
+  removeFriend: (friendId: string) => void;
+  addFriend: (newFriend: User) => void;
+  refetchUser: () => void;
 };
 
 const defaultUser: CompleteUser = {
@@ -56,6 +59,9 @@ const defaultValue: AppContextType = {
   logIn: () => {},
   logOut: () => {},
   addSentFriendRequest: () => {},
+  removeFriend: () => {},
+  addFriend: () => {},
+  refetchUser: () => {},
 };
 
 const AppContext = React.createContext<AppContextType>(defaultValue);
@@ -102,9 +108,42 @@ export const AppProvider = ({children}: {children: React.ReactElement}) => {
     updateUser(updatedUser);
   };
 
+  const removeFriend = (friendId: string) => {
+    const updatedUser = {
+      ...user,
+      friends: user.friends.filter(f => f.id !== friendId),
+    };
+    updateUser(updatedUser);
+  };
+
+  const addFriend = (newFriend: User) => {
+    const updatedUser: CompleteUser = {
+      ...user,
+      friends: [...user.friends, newFriend],
+      receivedFriendRequests: user.receivedFriendRequests.filter(
+        r => r.senderId !== newFriend.id,
+      ),
+    };
+    updateUser(updatedUser);
+  };
+
+  const refetchUser = async () => {
+    const updatedUser = await fetchUserById(user.id);
+    updateUser(updatedUser);
+  };
+
   return (
     <AppContext.Provider
-      value={{isLoggedIn, logIn, logOut, user, addSentFriendRequest}}>
+      value={{
+        isLoggedIn,
+        logIn,
+        logOut,
+        user,
+        addSentFriendRequest,
+        removeFriend,
+        addFriend,
+        refetchUser,
+      }}>
       {children}
     </AppContext.Provider>
   );

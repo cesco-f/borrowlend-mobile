@@ -1,9 +1,15 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Profile} from './Profile.screen';
-import {IconProps, ProfileIcon, SearchIcon} from '../components/icons';
+import {
+  IconProps,
+  ListIcon,
+  ProfileIcon,
+  SearchIcon,
+} from '../components/icons';
 import {theme} from '../theme';
-import {SearchBooks, SearchUsers} from './Search.screen';
+import {Search} from './Search.screen';
+import {UserLists} from './UserLists';
 
 const BottomTabs = createBottomTabNavigator();
 
@@ -16,16 +22,16 @@ interface BottomTabsScreen {
 
 const bottomTabsScreens: BottomTabsScreen[] = [
   {
-    name: 'Search',
-    component: SearchBooks,
-    tabBarIcon: SearchIcon,
-    title: 'Search',
+    name: 'UserLists',
+    component: UserLists,
+    tabBarIcon: ListIcon,
+    title: 'UserLists',
   },
   {
-    name: 'SearchUsers',
-    component: SearchUsers,
+    name: 'Search',
+    component: Search,
     tabBarIcon: SearchIcon,
-    title: 'SearchUsers',
+    title: 'Search',
   },
   {
     name: 'Profile',
