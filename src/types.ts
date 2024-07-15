@@ -39,7 +39,7 @@ interface UserItem {
   isAvailable: boolean;
 }
 
-interface CompleteUserItem extends UserItem {
+export interface CompleteUserItem extends UserItem {
   item: BLItem;
 }
 

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CompleteUser, FriendRequest, User} from './types';
+import {CompleteUser, CompleteUserItem, FriendRequest, User} from './types';
 import {fetchUserById} from './api';
 import SplashScreen from 'react-native-splash-screen';
 
@@ -39,6 +39,8 @@ type AppContextType = {
   removeFriend: (friendId: string) => void;
   addFriend: (newFriend: User) => void;
   refetchUser: () => void;
+  addUserItem: (newItem: CompleteUserItem) => void;
+  removeUserItem: (itemId: string) => void;
 };
 
 const defaultUser: CompleteUser = {
@@ -62,6 +64,8 @@ const defaultValue: AppContextType = {
   removeFriend: () => {},
   addFriend: () => {},
   refetchUser: () => {},
+  addUserItem: () => {},
+  removeUserItem: () => {},
 };
 
 const AppContext = React.createContext<AppContextType>(defaultValue);
@@ -132,6 +136,22 @@ export const AppProvider = ({children}: {children: React.ReactElement}) => {
     updateUser(updatedUser);
   };
 
+  const addUserItem = (newItem: CompleteUserItem) => {
+    const updatedUser: CompleteUser = {
+      ...user,
+      items: [...user.items, newItem],
+    };
+    updateUser(updatedUser);
+  };
+
+  const removeUserItem = (itemId: string) => {
+    const updatedUser: CompleteUser = {
+      ...user,
+      items: user.items.filter(i => i.itemId !== itemId),
+    };
+    updateUser(updatedUser);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -143,6 +163,8 @@ export const AppProvider = ({children}: {children: React.ReactElement}) => {
         removeFriend,
         addFriend,
         refetchUser,
+        addUserItem,
+        removeUserItem,
       }}>
       {children}
     </AppContext.Provider>

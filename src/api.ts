@@ -1,11 +1,4 @@
-import {
-  BLItem,
-  CompleteFriendRequest,
-  CompleteUser,
-  FriendRequest,
-  SearchBooks,
-  User,
-} from './types';
+import {BLItem, CompleteUser, FriendRequest, SearchBooks, User} from './types';
 
 export const API_BASE_URL = 'https://api.borrow-lend.com/borrowlend/v1';
 
@@ -64,12 +57,6 @@ export const fetchUsers = async ({searchTerm}: {searchTerm: string}) => {
 
 export const fetchUserById = async (userId: string) => {
   return fetchWrapper<CompleteUser>(`${API_BASE_URL}/users/${userId}`);
-};
-
-export const fetchReceivedFriendRequests = async (userId: string) => {
-  return fetchWrapper<CompleteFriendRequest[]>(
-    `${API_BASE_URL}/users/${userId}/receivedFriendRequests`,
-  );
 };
 
 export const login = async ({
@@ -149,7 +136,7 @@ export const deleteFriend = ({
   });
 };
 
-export const addUserItem = async (userId: string, item: BLItem) => {
+export const addUserItemAPI = async (userId: string, item: BLItem) => {
   return postRequest<BLItem>(`${API_BASE_URL}/items`, {
     userId,
     ...item,
@@ -166,7 +153,7 @@ export const queryItems = async (
   });
 };
 
-export const deleteUserItem = ({
+export const deleteUserItemAPI = ({
   userId,
   itemId,
 }: {
