@@ -5,7 +5,7 @@ import {BLText} from '../components/UIKit/BLText';
 import {theme} from '../theme';
 import {BLTextInput} from '../components/UIKit/BLTextInput';
 import {useSearchBooks} from '../hooks/useSearchBooks';
-import {ItemCard} from '../components/ItemCard';
+import {ItemCard} from '../components/ItemCardWithButtons';
 import {useAppContext} from '../App.provider';
 import {BLItem, User} from '../types';
 import {useSearchUsers} from '../hooks/useSearchUsers';

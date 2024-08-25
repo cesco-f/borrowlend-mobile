@@ -1,80 +1,49 @@
 import React from 'react';
-import {Button, Card} from 'react-native-paper';
-import {BLText} from './UIKit/BLText';
-import {StyleSheet} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import {BLItem} from '../types';
+import {BLText} from './UIKit/BLText';
 import {theme} from '../theme';
-import {useMutation} from '@tanstack/react-query';
-import {addUserItemAPI, deleteUserItemAPI} from '../api';
-import {useAppContext} from '../App.provider';
+import {BLCard, CARD_PADDING, CARD_WIDTH} from './UIKit/BLCard';
 
-const IMAGE_WIDTH = 150;
+const IMAGE_WIDTH = CARD_WIDTH - 2 * CARD_PADDING;
 
 export const ItemCard = ({item}: {item: BLItem}) => {
   const {author, title, coverUrl} = item;
-  const {user, addUserItem, removeUserItem} = useAppContext();
 
-  const {isPending: isAddingItem, mutateAsync: addItem} = useMutation({
-    mutationFn: () => addUserItemAPI(user.id, item),
-    onSuccess: () => {
-      addUserItem({isAvailable: true, itemId: item.id, userId: user.id, item});
-    },
-  });
-  const {isPending: isRemovingItem, mutateAsync: removeItem} = useMutation({
-    mutationFn: () => deleteUserItemAPI({userId: user.id, itemId: item.id}),
-    onSuccess: () => {
-      removeUserItem(item.id);
-    },
-  });
-  const isUserItem = user.items.some(({itemId}) => itemId === item.id);
   return (
-    <Card style={styles.card} mode="contained">
-      <Card.Cover
+    <BLCard>
+      <Image
         source={{uri: coverUrl.replace('http', 'https')}}
-        resizeMode="stretch"
         style={styles.image}
+        resizeMode="stretch"
       />
-      <Card.Content style={styles.content}>
-        <BLText style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+      <View style={styles.titleAndAuthorContainer}>
+        <BLText
+          style={styles.title}
+          size="h3"
+          numberOfLines={2}
+          ellipsizeMode="tail">
           {title}
         </BLText>
         <BLText style={styles.author}>{author}</BLText>
-        <Button
-          mode="contained"
-          loading={isAddingItem || isRemovingItem}
-          onPress={() => {
-            isUserItem ? removeItem() : addItem();
-          }}
-          style={styles.button}>
-          {isUserItem ? 'Remove item' : 'Add item'}
-        </Button>
-      </Card.Content>
-    </Card>
+      </View>
+    </BLCard>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    width: IMAGE_WIDTH,
-    alignSelf: 'flex-start',
-  },
   image: {
     width: IMAGE_WIDTH,
+    height: 1.33 * IMAGE_WIDTH,
+    borderRadius: CARD_PADDING / 2,
   },
-  content: {
-    paddingHorizontal: 0,
-    paddingVertical: 5,
-    paddingBottom: 0,
-    backgroundColor: theme.colorWhite,
+  titleAndAuthorContainer: {
     gap: 5,
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 12,
   },
   author: {
-    fontSize: 10,
     color: theme.colorBlue,
   },
-  button: {},
 });

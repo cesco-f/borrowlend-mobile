@@ -1,10 +1,14 @@
 export const theme = {
   //colors
-  colorPurple: '#454C73',
+  colorRed: '#EF476F',
+  colorYellow: '#FFD166',
+  colorGreen: '#06D6A0',
+  colorLightBlue: '#118AB2',
+  colorBlue: '#0B617D',
+  colorDarkBlue: '#073B4C',
   colorWhite: '#fff',
-  colorLavender: '#87677B',
-  colorBlue: '#00b4d5',
-  colorGrey: '#8E9AAF',
+  colorGrey: '#8B959F',
+  colorLightGrey: '#F7F8FA',
 
   // fonts
   fontFamilyBold: 'FONTSPRINGDEMO-ObviaBold',

@@ -8,16 +8,30 @@ import {
 import {theme} from '../theme';
 import {BLText} from '../components/UIKit/BLText';
 import {Button} from 'react-native-paper';
+import {ItemCard} from '../components/ItemCardWithButtons';
 
 export const UserLists = () => {
   const {user, refetchUser} = useAppContext();
-  const {friends, receivedFriendRequests} = user;
+  const {friends, receivedFriendRequests, items} = user;
   return (
     <>
       <View>
         <Button onPress={refetchUser}>
           <BLText>Refetch user data</BLText>
         </Button>
+        <BLText>My items</BLText>
+        {items.length ? (
+          <FlatList
+            data={items}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => <ItemCard item={item.item} />}
+            scrollEnabled
+            horizontal
+            contentContainerStyle={styles.resultsContainer}
+          />
+        ) : (
+          <BLText>This user has no items</BLText>
+        )}
         <BLText>User friends</BLText>
         {friends.length ? (
           <FlatList
