@@ -12,6 +12,8 @@ import {theme} from '../theme';
 import {BLText} from '../components/UIKit/BLText';
 import {Home} from './Home.screen';
 import {Search} from './Search.screen';
+import {Profile} from './Profile.screen';
+import {UserLists} from './UserLists';
 
 const BottomTabs = createBottomTabNavigator();
 
@@ -26,15 +28,15 @@ interface BottomTabsScreen {
 // const Library = () => {
 //   return <BLText>Library</BLText>;
 // };
-const Exchanges = () => {
-  return <BLText>Exchanges</BLText>;
-};
+// const Exchanges = () => {
+//   return <BLText>Exchanges</BLText>;
+// };
 const Chat = () => {
   return <BLText>Chat</BLText>;
 };
-const Friends = () => {
-  return <BLText>Friends</BLText>;
-};
+// const Friends = () => {
+//   return <BLText>Friends</BLText>;
+// };
 
 const bottomTabsScreens: BottomTabsScreen[] = [
   {
@@ -53,7 +55,7 @@ const bottomTabsScreens: BottomTabsScreen[] = [
   },
   {
     name: 'Exchanges',
-    component: Exchanges,
+    component: UserLists,
     tabBarIcon: ExchangesIcon,
     title: 'Exchanges',
     tabBarLabel: 'Exchanges',
@@ -67,7 +69,7 @@ const bottomTabsScreens: BottomTabsScreen[] = [
   },
   {
     name: 'Friends',
-    component: Friends,
+    component: Profile,
     tabBarIcon: FriendsIcon,
     title: 'Friends',
     tabBarLabel: 'Friends',

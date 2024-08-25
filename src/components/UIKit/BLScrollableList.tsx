@@ -1,22 +1,23 @@
 import React from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import {BLText} from './BLText';
-import {ItemCard} from '../ItemCard';
 import {theme} from '../../theme';
-import {CompleteUserItem} from '../../types';
+import {BLItem, User} from '../../types';
 
-export const BLScrollableList = ({
+export const BLScrollableList = <T extends BLItem | User>({
   title,
   items,
+  renderItem,
 }: {
   title: string;
-  items: CompleteUserItem[];
+  items: T[];
+  renderItem: ListRenderItem<T>;
 }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <BLText size="h2">{title}</BLText>
-        <BLText size="h5" style={{color: theme.colorLightBlue}}>
+        <BLText size="h5" color="blue">
           View all
         </BLText>
       </View>
@@ -24,7 +25,7 @@ export const BLScrollableList = ({
         <FlatList
           data={items}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => <ItemCard item={item.item} />}
+          renderItem={renderItem}
           scrollEnabled
           horizontal
           contentContainerStyle={styles.resultsContainer}

@@ -13,28 +13,36 @@ const fontSizeMap: Record<HeadlinesSize, number> = {
   h1: 24,
 };
 
+type Colors = 'black' | 'grey' | 'blue';
+
+const colorsMap: Record<Colors, string> = {
+  grey: theme.colorGrey,
+  black: theme.colorBlack,
+  blue: theme.colorLightBlue,
+};
+
 export const BLText = ({
   style,
   children,
   size = 'h3',
+  color = 'black',
+  bold = false,
   ...rest
 }: TextProps<unknown> & {
-  style?: Omit<StyleProp<TextStyle>, 'fontWeight' | 'fontSize'> & {
-    fontWeight?: 'bold';
-  };
+  style?: StyleProp<TextStyle>;
   size?: HeadlinesSize;
+  color?: Colors;
+  bold?: boolean;
 }) => {
   return (
     <Text
       style={[
         style,
         {
-          fontFamily:
-            style?.fontWeight === 'bold'
-              ? theme.fontFamilyBold
-              : theme.fontFamilyRegular,
+          fontFamily: bold ? theme.fontFamilyBold : theme.fontFamilyRegular,
           fontWeight: undefined,
           fontSize: fontSizeMap[size],
+          color: colorsMap[color],
         },
       ]}
       {...rest}>

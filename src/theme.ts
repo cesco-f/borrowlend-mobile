@@ -9,6 +9,7 @@ export const theme = {
   colorWhite: '#fff',
   colorGrey: '#8B959F',
   colorLightGrey: '#F7F8FA',
+  colorBlack: '#000',
 
   // fonts
   fontFamilyBold: 'FONTSPRINGDEMO-ObviaBold',
