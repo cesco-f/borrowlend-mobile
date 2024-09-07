@@ -123,7 +123,7 @@ export const AppProvider = ({children}: {children: React.ReactElement}) => {
   const addFriend = (newFriend: User) => {
     const updatedUser: CompleteUser = {
       ...user,
-      friends: [...user.friends, newFriend],
+      friends: [...user.friends, {...newFriend, items: []}],
       receivedFriendRequests: user.receivedFriendRequests.filter(
         r => r.senderId !== newFriend.id,
       ),

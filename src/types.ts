@@ -33,7 +33,7 @@ export interface User {
   photoUrl?: string;
 }
 
-interface UserItem {
+export interface UserItem {
   itemId: string;
   userId: string;
   isAvailable: boolean;
@@ -54,7 +54,7 @@ export interface CompleteFriendRequest extends FriendRequest {
 }
 
 export interface CompleteUser extends User {
-  friends: User[];
+  friends: (User & {items: UserItem[]})[];
   items: CompleteUserItem[];
   receivedFriendRequests: CompleteFriendRequest[];
   sentFriendRequests: FriendRequest[];

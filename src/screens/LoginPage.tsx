@@ -47,7 +47,7 @@ export default function LoginScreen() {
         }}
         style={styles.button}
         loading={isPending}>
-        <BLText style={{color: theme.colorWhite}}>Login</BLText>
+        <BLText color="white">Login</BLText>
       </Button>
     </View>
   );
@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
-    backgroundColor: theme.colorBlue,
+    backgroundColor: theme.colorLightBlue,
   },
 });

@@ -1,21 +1,16 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {BLItem} from '../types';
 import {BLText} from './UIKit/BLText';
-import {BLCard, CARD_PADDING, CARD_WIDTH} from './UIKit/BLCard';
-
-const IMAGE_WIDTH = CARD_WIDTH - 2 * CARD_PADDING;
+import {BLCard} from './UIKit/BLCard';
+import {ItemImage} from './ItemImage';
 
 export const ItemCard = ({item}: {item: BLItem}) => {
   const {author, title, coverUrl} = item;
 
   return (
     <BLCard>
-      <Image
-        source={{uri: coverUrl.replace('http', 'https')}}
-        style={styles.image}
-        resizeMode="stretch"
-      />
+      <ItemImage coverUrl={coverUrl} />
       <View style={styles.titleAndAuthorContainer}>
         <BLText size="h3" numberOfLines={2} bold ellipsizeMode="tail">
           {title}
@@ -27,11 +22,6 @@ export const ItemCard = ({item}: {item: BLItem}) => {
 };
 
 const styles = StyleSheet.create({
-  image: {
-    width: IMAGE_WIDTH,
-    height: 1.33 * IMAGE_WIDTH,
-    borderRadius: CARD_PADDING / 2,
-  },
   titleAndAuthorContainer: {
     gap: 5,
   },

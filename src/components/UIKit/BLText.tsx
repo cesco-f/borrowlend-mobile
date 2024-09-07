@@ -13,12 +13,13 @@ const fontSizeMap: Record<HeadlinesSize, number> = {
   h1: 24,
 };
 
-type Colors = 'black' | 'grey' | 'blue';
+type Colors = 'black' | 'grey' | 'blue' | 'white';
 
 const colorsMap: Record<Colors, string> = {
   grey: theme.colorGrey,
   black: theme.colorBlack,
   blue: theme.colorLightBlue,
+  white: theme.colorWhite,
 };
 
 export const BLText = ({

@@ -15,16 +15,22 @@ export const Profile = () => {
     <View style={styles.container}>
       <BLText style={styles.title}>User Profile</BLText>
       <View style={styles.infoContainer}>
-        <BLText style={styles.label}>First Name</BLText>
-        <BLText style={styles.value}>{name}</BLText>
+        <BLText style={styles.label}>First Name:</BLText>
+        <BLText bold style={styles.value}>
+          {name}
+        </BLText>
       </View>
       <View style={styles.infoContainer}>
         <BLText style={styles.label}>Last Name:</BLText>
-        <BLText style={styles.value}>{lastName}</BLText>
+        <BLText bold style={styles.value}>
+          {lastName}
+        </BLText>
       </View>
       <View style={styles.infoContainer}>
-        <BLText style={styles.label}>City</BLText>
-        <BLText style={styles.value}>{location} </BLText>
+        <BLText style={styles.label}>City:</BLText>
+        <BLText bold style={styles.value}>
+          {location}{' '}
+        </BLText>
       </View>
       <Button mode="contained" onPress={logOut} style={styles.button}>
         Log Out
@@ -57,6 +63,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
-    backgroundColor: theme.colorBlue,
+    backgroundColor: theme.colorLightBlue,
   },
 });

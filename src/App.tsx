@@ -1,6 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {BottomTabsNavigator} from './screens/BottomTabs.navigator';
+import {BottomTabsNavigator} from './navigators/BottomTabs.navigator';
 import {AppProvider, useAppContext} from './App.provider';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import LoginScreen from './screens/LoginPage';
