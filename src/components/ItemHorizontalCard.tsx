@@ -16,7 +16,7 @@ export const ItemHorizontalCard = ({item}: {item: CompleteUserItem}) => {
         <BLText bold size="h3" numberOfLines={2} ellipsizeMode="tail">
           {title}
         </BLText>
-        <BLText color="blue" size="h2">
+        <BLText color="blue" size="h4">
           {author}
         </BLText>
       </View>

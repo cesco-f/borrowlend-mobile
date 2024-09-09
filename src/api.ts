@@ -50,7 +50,7 @@ export const fetchUsers = async ({searchTerm}: {searchTerm: string}) => {
     return [];
   }
 
-  return fetchWrapper<User[]>(
+  return fetchWrapper<(User & {_count: {items: number}})[]>(
     `${API_BASE_URL}/users?q=${searchTerm.split(' ')[0].toLowerCase()}`,
   );
 };

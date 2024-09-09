@@ -9,7 +9,7 @@ import {ItemCard} from '../components/ItemCardWithButtons';
 import {useAppContext} from '../App.provider';
 import {BLItem, User} from '../types';
 import {useSearchUsers} from '../hooks/useSearchUsers';
-import {SearchUserCard} from '../components/UserCard';
+import {FriendHorizontalCard} from '../components/FriendHorizontalCard';
 
 const SearchInternal = <T extends BLItem | User>({
   isLoading,
@@ -41,7 +41,7 @@ const SearchInternal = <T extends BLItem | User>({
         onPress={() => onPress(query)}
         style={styles.button}
         loading={isLoading}>
-        <BLText style={{color: theme.colorWhite}}>Search</BLText>
+        <BLText color="white">Search</BLText>
       </Button>
       {error && <BLText style={styles.error}>{error.message}</BLText>}
       {data ? (
@@ -81,7 +81,7 @@ const SearchBooks = () => {
   );
 };
 
-const SearchUsers = () => {
+export const SearchUsers = () => {
   const [searchUsersQuery, setSearchUsersQuery] = useState('');
   const {
     user: {id},
@@ -97,7 +97,18 @@ const SearchUsers = () => {
       isLoading={isLoading}
       onPress={(query: string) => setSearchUsersQuery(query)}
       error={error}
-      renderItem={({item}) => <SearchUserCard item={item} />}
+      renderItem={({item}) => (
+        <FriendHorizontalCard
+          friend={{
+            ...item,
+            items: new Array(item._count.items).fill({
+              isAvailable: true,
+              itemId: '',
+              userId: item.id,
+            }),
+          }}
+        />
+      )}
       label="Search users"
     />
   );
@@ -130,7 +141,7 @@ const styles = StyleSheet.create({
   },
   resultsContainer: {
     gap: 20,
-    backgroundColor: theme.colorWhite,
     alignSelf: 'flex-start',
+    flex: 1,
   },
 });

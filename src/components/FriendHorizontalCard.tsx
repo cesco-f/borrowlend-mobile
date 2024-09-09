@@ -4,22 +4,17 @@ import {User, UserItem} from '../types';
 import {FriendImage} from './FriendImage';
 import {BLText} from './UIKit/BLText';
 import {BLHorizontalCard} from './UIKit/BLHorizontalCard';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {FriendsStackParamList} from '../navigators/Friends.navigator';
 
 export const FriendHorizontalCard = ({
   friend,
+  onPress,
 }: {
   friend: User & {items: UserItem[]};
+  onPress?: () => void;
 }) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<FriendsStackParamList>>();
-
-  const {photoUrl, name, items, location, id} = friend;
+  const {photoUrl, name, items, location} = friend;
   return (
-    <BLHorizontalCard
-      onPress={() => navigation.navigate('FriendDetails', {friendId: id})}>
+    <BLHorizontalCard onPress={onPress}>
       <FriendImage photoUrl={photoUrl} imageSize="s" />
       <View style={styles.friendInfo}>
         <BLText bold size="h2">

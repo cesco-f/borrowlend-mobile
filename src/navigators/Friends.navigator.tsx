@@ -1,10 +1,10 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {MyFriends} from '../screens/MyFriends.screen';
+import {Friends} from '../screens/Friends.screen';
 import {FriendDetails} from '../screens/FriendDetails.screen';
 
 export type FriendsStackParamList = {
-  MyFriends: undefined;
+  Friends: undefined;
   FriendDetails: {friendId: string};
 };
 
@@ -16,7 +16,7 @@ export const FriendsStackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="MyFriends" component={MyFriends} />
+      <Stack.Screen name="Friends" component={Friends} />
       <Stack.Screen name="FriendDetails" component={FriendDetails} />
     </Stack.Navigator>
   );
